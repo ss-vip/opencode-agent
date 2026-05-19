@@ -43,9 +43,7 @@ taskkill /IM node.exe
 
 Persist runtime state:
 
-```text
 ./temp/active_sessions.json
-```
 
 ### Phase N+1
 
@@ -57,94 +55,54 @@ Persist runtime state:
 
 ## Timeout Rules
 
-All:
+All network operations:
+
 - HTTP
 - socket
 - IPC
 - fetch
 
-require explicit timeout.
+must enforce:
 
-Maximum:
-
-```text
-2000ms
-```
+2000ms max
 
 ## Cross-OS Commands
 
-### Windows
-
-Port check:
-
-```powershell
+Windows:
 netstat -ano | findstr <port>
-```
-
-Kill process:
-
-```powershell
 taskkill /F /PID <pid>
-```
 
-### Unix
-
-Port check:
-
-```bash
+Unix:
 lsof -i :<port> -t
-```
-
-Kill process:
-
-```bash
 kill -9 <pid>
-```
 
-Only terminate tracked PIDs.
-
-## Sandbox Rules
-
-Temporary/debug scripts:
-- must stay inside `./temp/`
-- should include timestamps
-- must be deleted after success
+Only tracked PIDs allowed.
 
 ## File Rules
 
-- avoid broad recursive scans
+- avoid broad scans
 - avoid massive rewrites
 - prefer targeted reads
 - prefer line-range modifications
 
 ## Failure Recovery
 
-If execution fails:
+1. inspect stderr/log
+2. retry once
+3. reduce scope
+4. log to ./temp/defects.md
+5. stop infinite retry
 
-1. inspect stderr/log delta
-2. retry once only
-3. reduce execution scope
-4. record failure into:
+## Verification Scope
 
-```text
-./temp/defects.md
-```
-
-5. stop infinite retry loops
-
-## Verification
-
-Verify impacted scope only:
-- relevant tests
-- relevant lint/typecheck
+- impacted system only
 - PID cleanup
-- orphan port cleanup
-- sandbox leakage
+- port cleanup
+- temp leakage check
 
 ## Communication
 
 - concise
 - structured
-- low-token
-- zh-Hant-TW explanations
-- English technical terminology
+- zh-Hant-TW explanation
+- English technical terms
