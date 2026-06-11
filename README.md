@@ -5,7 +5,7 @@
 ### 檔案結構與說明
 
 * **`coder-agent.md` (核心 + 全部政策)**
-  * 含 10 個核心章節，全面涵蓋語言治理、系統模型、Vibe/Production 雙模式、行為護欄、工具信任、安全防禦、DevOps 防卡死、全端架構、MCP 治理與回應格式。
+  * 含 8 個核心章節，全面涵蓋語言治理、執行模式、行為護欄、工具安全、DevOps、全端架構、CLI 權限分級、MCP 路由。
   * 自主迭代工作流 Plan → Act → Reflect（規劃、執行、反思）的 Resilience Loop 彈性閉環。
   * Agent 在執行任務時，會自動建立 ./temp/ 目錄與執行期狀態檔（Runtime States），確保所有暫存檔案、腳本與測試產物（Artifacts）與主專案嚴格隔離。
 
