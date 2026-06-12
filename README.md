@@ -4,9 +4,9 @@
 
 ### 檔案結構與說明
 
-* **`coder-agent.md` (核心 + 全部政策)**
-  * 含 8 個核心章節，全面涵蓋語言治理、執行模式、行為護欄、工具安全、DevOps、全端架構、CLI 權限分級、MCP 路由。
-  * 自主迭代工作流 Plan → Act → Reflect（規劃、執行、反思）的 Resilience Loop 彈性閉環。
+* **`build-agent-plus.md` (核心 + 全部政策)**
+  * 含 9 個核心章節，全面涵蓋語言治理、執行模式、行為護欄、工具安全、DevOps、全端架構、CLI 權限分級、MCP 工具、完成定義 (DoD)。
+  * 自主迭代工作流 INTENT → EXECUTE → VERIFY → REFLECT（意圖→執行→驗證→反思）的 Resilience Loop 彈性閉環。
   * Agent 在執行任務時，會自動建立 ./temp/ 目錄與執行期狀態檔（Runtime States），確保所有暫存檔案、腳本與測試產物（Artifacts）與主專案嚴格隔離。
 
 * **`MCP Tools` (常用 MCP 工具)**
@@ -33,7 +33,7 @@
   "$schema": "https://opencode.ai/config.json",
 
   "instructions": [
-    "https://raw.githubusercontent.com/ss-vip/coding-agent/main/coder-agent.md"
+    "https://raw.githubusercontent.com/ss-vip/coding-agent/main/build-agent-plus.md"
   ]
 }
 ```
