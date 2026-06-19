@@ -18,6 +18,7 @@
   * [cloak-browser-mcp](https://npmx.dev/package/@devinwangd/cloak-browser-mcp)
   * [duckduckgo-mcp-server](https://github.com/nickclyde/duckduckgo-mcp-server)
   * [mcp-web-search](https://github.com/tickernelz/mcp-web-search)
+  * [firecrawl](https://github.com/firecrawl/firecrawl-mcp-server)
 
 * **外部 Skills 連結 (參考)**
   * [code-review](https://github.com/awesome-skills/code-review-skill)
