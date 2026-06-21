@@ -1,0 +1,2 @@
+# temp artifacts (logs, debug scripts, test output, mocks, generated assets)
+./temp/

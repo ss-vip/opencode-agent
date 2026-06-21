@@ -5,9 +5,10 @@
 ### 檔案結構與說明
 
 * **`build-agent-plus.md` (核心 + 全部政策)**
-  * 含 9 個核心章節，全面涵蓋語言治理、執行模式、行為護欄、工具安全、DevOps、全端架構、CLI 權限分級、MCP 工具、完成定義 (DoD)。
+  * 含 9 個核心章節，全面涵蓋語言治理、執行模式、行為護欄、工具安全、DevOps、全端架構、CLI 權限分級、MCP 工具決策矩陣、完成定義 (DoD)。
   * 自主迭代工作流 INTENT → EXECUTE → VERIFY → REFLECT（意圖→執行→驗證→反思）的 Resilience Loop 彈性閉環。
-  * Agent 在執行任務時，會自動建立 ./temp/ 目錄與執行期狀態檔（Runtime States），確保所有暫存檔案、腳本與測試產物（Artifacts）與主專案嚴格隔離。
+  * Agent 在執行任務時，會自動建立 `./temp/` 目錄與執行期狀態檔（Runtime States），確保所有暫存檔案、腳本與測試產物（Artifacts）與主專案嚴格隔離。
+  * 已建立 `.gitignore` 將 `./temp/` 排除於版本控制之外。
 
 * **`MCP Tools` (常用 MCP 工具)**
   * [pluggedin](https://github.com/VeriTeknik/pluggedin-plugin)
