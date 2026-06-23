@@ -21,8 +21,8 @@
   * [mcp-web-search](https://github.com/tickernelz/mcp-web-search)
   * [firecrawl](https://github.com/firecrawl/firecrawl-mcp-server)
 
-* **外部 Skills 連結 (參考)**
-  * [code-review](https://github.com/awesome-skills/code-review-skill)
+* **其他套件工具**
+  * [ponytail](https://github.com/DietrichGebert/ponytail)
 
 ---
 
@@ -45,25 +45,31 @@
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-
   "agent": {
     "build": {
       "temperature": 0.1,
       "permission": {
-        "*": "allow",
+        "read": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "question": "allow",
+        "todowrite": "allow",
         "skill": {
           "*": "allow"
         }
-      },
-      "tools": {
-        "*": true
       }
     }
   },
   "default_agent": "build",
   "compaction": {
     "auto": true,
-    "prune_tool_outputs": true,
+    "prune": true,
     "strategy": "summarize",
     "threshold": 0.85
   },

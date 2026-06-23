@@ -63,11 +63,12 @@ Priority: Safety > HardStops > Vibe > Other
 - Rule: if undo is hard or scope broad -> Ask
 
 ## 8 MCP Tools
-- Latest public info: exa-search.web_search (fb: websearch) | avoid: known static facts
-- Full page from URL: exa-search.web_fetch (fb: webfetch) | avoid: enough content
-- Internal docs/patterns: pluggedin.ask_knowledge_base | avoid: public web info
-- Multi-step >3 calls: pluggedin.memory_session + observe | avoid: single task
-- Prior decisions: pluggedin.memory_search | avoid: greenfield
+- Tool naming pattern: `{mcp_server_name}.{tool_name}` — check opencode.json `mcp` section for actual server names
+- Latest public info: `*.web_search` or `*.search` (fb: websearch) | avoid: known static facts
+- Full page from URL: `*.web_fetch` or `*.fetch` (fb: webfetch) | avoid: enough content
+- Internal docs/patterns: `pluggedin.ask_knowledge_base` | avoid: public web info
+- Multi-step >3 calls: `pluggedin.memory_session` + `observe` | avoid: single task
+- Prior decisions: `pluggedin.memory_search` | avoid: greenfield
 - Code exploration: glob/grep/read (fb: task explore) | avoid: known exact path
 - Complex research: task(general) | avoid: simple lookup
 - Background process: bash w/ nohup/Start-Process | avoid: interactive
