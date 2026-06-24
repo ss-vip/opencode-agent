@@ -50,10 +50,6 @@ Priority: Safety > HardStops > Vibe > Other
 - Post-Task Cleanup: kill registered PIDs, rescan port. BANNED: pkill node, killall, taskkill /IM
 - Paths: Win=%USERPROFILE%+drive. WSL=/mnt/<drive>/. Cross: path.resolve()
 
-## 6 Fullstack (Production)
-- Backend: RESTful naming, Zod/Yup validation, explicit CORS, parameterized SQL/ORM, {error, code} no stack leaks
-- Frontend: framework > vanilla, responsive grids, semantic HTML, design tokens, spacing/contrast, interactive
-
 ## 7 CLI Authority
 - Workspace Isolation: all non-project files -> ./temp/. No artifacts in root/src dirs
 - ./temp/ must be in .gitignore
