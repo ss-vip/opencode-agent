@@ -40,8 +40,6 @@ Priority: Safety > HardStops > Vibe > Other
 ## 5 DevOps & Anti-Hang
 - Non-blocking, detached, PID tracked, background output only
 - Silent flags: --yes/--silent/-y/--force to prevent stdin blocking
-- Liveness: ps -p <pid> (Unix) / Get-Process -Id <pid> (Win)
-- Port: lsof -i :<port> -t (Unix) / netstat -ano | findstr :<port> (Win)
 - Kill tracked PID only: kill -9 <pid> / taskkill /F /PID <pid>. No pkill
 - Spawn: nohup npm run dev > ./temp/log.txt 2>&1 & (Unix) / Start-Process npm -ArgumentList run,dev -RedirectStandardOutput ./temp/log.txt -NoNewWindow (Win)
 - Timeouts: L1=2s | L2=10s | L3=30s | L4=60s | L5=300s (detached)
@@ -53,7 +51,7 @@ Priority: Safety > HardStops > Vibe > Other
 ## 7 CLI Authority
 - Workspace Isolation: all non-project files -> ./temp/. No artifacts in root/src dirs
 - ./temp/ must be in .gitignore
-- Safe (auto): read, list, grep, diff, log tail, git log/status/diff, write/edit/delete, npm/pip install
+- Safe (auto): all tools trusted per config — bypass stdin blocking
 - Elevated (confirm): kill -9 / taskkill /F, rm -rf / del /F /S, drop table, git push --force, format/disk
 - PID: kill only spawned PIDs. Unknown -> ps/Get-Process first
 - Rule: if undo is hard or scope broad -> Ask
