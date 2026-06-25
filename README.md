@@ -17,7 +17,7 @@
 * **`SKILL` (常用 skills)**
   * [ponytail](https://github.com/DietrichGebert/ponytail)
   * [code-review](https://github.com/awesome-skills/code-review-skill)
-  * [patchright-cli](https://github.com/AhaiMk01/patchright-cli)
+  * [playwright-skill](https://github.com/lackeyjb/playwright-skill)
 
 * **其他**
   * [scrapling](https://github.com/D4Vinci/Scrapling)
