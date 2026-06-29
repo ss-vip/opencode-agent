@@ -18,6 +18,7 @@
 * **`SKILL` (常用 skills)**
   * [ponytail](https://github.com/DietrichGebert/ponytail)
   * [code-review](https://github.com/awesome-skills/code-review-skill)
+  * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
 
 * **其他**
   * [scrapling](https://github.com/D4Vinci/Scrapling)
@@ -85,6 +86,7 @@
   "plugin": [
     "opencode-chrome-devtools",
     "opencode-timeout-continuer",
+    "opencode-skill-creator",
     "@franlol/opencode-md-table-formatter@latest",
     "./.opencode/plugins/ponytail.mjs"
   ],
