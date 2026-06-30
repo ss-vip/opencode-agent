@@ -13,6 +13,7 @@
 * **`MCP Tools` (常用 MCP)**
   * [pluggedin](https://github.com/VeriTeknik/pluggedin-plugin)
   * [exa-multi-mcp](https://libraries.io/npm/exa-multi-mcp)
+  * [codegraph](https://github.com/colbymchenry/codegraph)
 
 * **`SKILL` (常用 skills)**
   * [ponytail](https://github.com/DietrichGebert/ponytail)
@@ -45,6 +46,15 @@
         "PLUGGEDIN_API_KEY": "pg_in_xxx..."
       },
       "type": "local"
+    },
+    "codegraph": {
+      "type": "local",
+      "command": [
+        "codegraph",
+        "serve",
+        "--mcp"
+      ],
+      "enabled": true
     }
   },
   "agent": {

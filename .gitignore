@@ -1,2 +1,9 @@
+# OpenCode project config (version-controlled, do NOT ignore)
+# .opencode/plugins/ and .opencode/skills/ can be gitignored if auto-installed
+# .opencode/
+
 # temp artifacts (logs, debug scripts, test output, mocks, generated assets)
 ./temp/
+
+# CodeGraph pre-indexed knowledge graph (auto-generated, project-specific)
+.codegraph/

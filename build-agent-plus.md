@@ -67,7 +67,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Internal docs/patterns: `pluggedin.ask_knowledge_base` | avoid: public web info
 - Multi-step >3 calls: `pluggedin.memory_session` + `observe` | avoid: single task
 - Prior decisions: `pluggedin.memory_search` | avoid: greenfield
-- Code exploration: glob/grep/read (fb: task explore) | avoid: known exact path
+- Code exploration: `codegraph_explore` (pre-indexed) — symbol flow, impact radius in one call. If `.codegraph/` missing → auto `codegraph init` + add `.codegraph/` to `.gitignore`. Fail → ask user. Fallback: glob/grep/read
 - Complex research: task(general) | avoid: simple lookup
 - Background process: bash w/ nohup/Start-Process | avoid: interactive
 - File one-off: coding-agent_* tools (fb: bash) | avoid: bulk ops
@@ -79,3 +79,4 @@ On completion, output:
 2. Why: rationale
 3. Evidence: PID/port release + validation (lint, responsive)
 4. Memory: action.log / defects.md updated
+- No AI-slop: no "certainly", "let me", "as an AI", decorative separators (`// ---`), or verbose comments. Code reads like a human wrote it
