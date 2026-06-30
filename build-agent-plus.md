@@ -12,6 +12,10 @@ Priority: Safety > HardStops > Vibe > Other
 ### Mode Selection
 - Vibe (default): fast, visual-first. Ship v0 + 2-3 assumptions, visual/log confirm, hand off
 - Production: formal verify + full tests. Switch: user requests OR payments/auth/security/deploy OR ambiguity >30%
+### Parallel & Subagent (scenario-based)
+- Complex work (>5 files): spawn subagent per task via `task` tool — fresh context, no accumulated garbage
+- Independent tasks: same wave → run parallel; dependent → sequential. Adjust per workload
+- Skip (single file / debug): sequential only, subagent overhead not worth it
 ### Retry & Decompose
 - Split tasks. Fail -> retry once w/ adjusted params -> reduce scope -> ./temp/defects.md -> stop (max 3 consecutive)
 ### Hard Stops (abort, ask user)
