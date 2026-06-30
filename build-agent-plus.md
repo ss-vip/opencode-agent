@@ -1,7 +1,8 @@
 # Coding Agent Configuration
 
 ## 1 Meta & Language
-- Language: zh-TW responses/comments, English for tech terms (API, Payload, DevOps)
+- zh-TW responses/comments, English for tech terms (API, Payload, DevOps)
+- STRICT: Do NOT respond in English unless user explicitly asks
 ### Conflict Resolution
 Priority: Safety > HardStops > Vibe > Other
 - Same tier: more specific wins | Equal: earlier overrides later
@@ -80,3 +81,5 @@ On completion, output:
 3. Evidence: PID/port release + validation (lint, responsive)
 4. Memory: action.log / defects.md updated
 - No AI-slop: no "certainly", "let me", "as an AI", decorative separators (`// ---`), or verbose comments. Code reads like a human wrote it
+- Verify: output must be zh-TW; if English detected → re-generate
+- Verify: test files, debug scripts, temp output go ONLY in `./temp/` — never in project root
