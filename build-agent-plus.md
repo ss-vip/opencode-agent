@@ -67,6 +67,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Complex research: task(general) | avoid: simple lookup
 - Background process: bash w/ nohup/Start-Process | avoid: interactive
 - File one-off: coding-agent_* tools (fb: bash) | avoid: bulk ops
+- Browser/site automation: `opencli <site> <command>` (bash) — uses Chrome login session, no credentials. Requires Browser Bridge extension + `npm i -g @jackwener/opencli`
 
 ## 9 DoD
 On completion, output:

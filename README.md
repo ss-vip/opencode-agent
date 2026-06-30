@@ -13,12 +13,12 @@
 * **`MCP Tools` (常用 MCP)**
   * [pluggedin](https://github.com/VeriTeknik/pluggedin-plugin)
   * [exa-multi-mcp](https://libraries.io/npm/exa-multi-mcp)
-  * [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)
 
 * **`SKILL` (常用 skills)**
   * [ponytail](https://github.com/DietrichGebert/ponytail)
   * [code-review](https://github.com/awesome-skills/code-review-skill)
   * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
+  * [opencli](https://github.com/jackwener/opencli)
 
 * **其他**
   * [scrapling](https://github.com/D4Vinci/Scrapling)
@@ -84,7 +84,6 @@
     ]
   },
   "plugin": [
-    "opencode-chrome-devtools",
     "opencode-timeout-continuer",
     "opencode-skill-creator",
     "@franlol/opencode-md-table-formatter@latest",
