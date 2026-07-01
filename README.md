@@ -19,7 +19,7 @@
   * [ponytail](https://github.com/DietrichGebert/ponytail)
   * [code-review](https://github.com/awesome-skills/code-review-skill)
   * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
-  * [opencli](https://github.com/jackwener/opencli)
+  * [browser-act](https://github.com/browser-act/skills)
 
 * **其他**
   * [scrapling](https://github.com/D4Vinci/Scrapling)

@@ -33,7 +33,7 @@ PID: kill only spawned PIDs. Unknown → ps/Get-Process first
 - Web: search for current info, fetch for page content
 - Memory: pluggedin — search past decisions, ask knowledge base
 - Code: codegraph_explore for symbol flow, then glob/grep/read
-- Browser: opencli <site> <command> (needs Browser Bridge + `npm i -g @jackwener/opencli`)
+- Browser: `browser-act` — `state`, `click n`, `input n`, `eval`. Needs Chrome `--remote-debugging-port=9222`. If not on PATH → ask user to install
 - Research: `task` with fresh subagent
 - Background: bash with nohup (Unix) / Start-Process (Win)
 

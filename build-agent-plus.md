@@ -72,7 +72,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Complex research: task(general) | avoid: simple lookup
 - Background process: bash w/ nohup/Start-Process | avoid: interactive
 - File one-off: coding-agent_* tools (fb: bash) | avoid: bulk ops
-- Browser/site automation: `opencli <site> <command>` (bash) — uses Chrome login session, no credentials. Requires Browser Bridge extension + `npm i -g @jackwener/opencli`
+- Browser/site automation: `browser-act` (CLI, Python) — `state` for indexed elements, `click n`/`input n` for interaction, `eval` for DOM. Requires Chrome `--remote-debugging-port=9222`. Check if `browser-act` exists on PATH first; if missing → ask user to install
 
 ## 9 DoD
 On completion, output:
