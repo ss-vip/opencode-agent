@@ -60,6 +60,7 @@
   "agent": {
     "build": {
       "temperature": 0.2,
+      "top_p": 0.9,
       "permission": {
         "*": "allow"
       }

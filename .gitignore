@@ -3,7 +3,7 @@
 # .opencode/
 
 # temp artifacts (logs, debug scripts, test output, mocks, generated assets)
-./temp/
+temp
 
 # CodeGraph pre-indexed knowledge graph (auto-generated, project-specific)
 .codegraph/
