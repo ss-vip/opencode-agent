@@ -33,7 +33,7 @@ PID: kill only spawned PIDs. Unknown → ps/Get-Process first
 - Web: search for current info, fetch for page content
 - Memory: pluggedin — search past decisions, ask knowledge base
 - Code: codegraph_explore for symbol flow, then glob/grep/read
-- Browser: `browser-act` — `state`, `click n`, `input n`, `eval`. Needs Chrome `--remote-debugging-port=9222`. If not on PATH → ask user to install
+- Browser: `agent-browser` — `snapshot`/`snapshot -i` for refs (`@e1`), `click @e2`, `fill @e3 "text"`, `eval`, `screenshot`. Install: `npm i -g agent-browser` + `agent-browser install`. Use `--profile Default` for login session. Not on PATH → ask
 - Research: `task` with fresh subagent
 - Background: bash with nohup (Unix) / Start-Process (Win)
 

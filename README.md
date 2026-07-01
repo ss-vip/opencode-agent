@@ -19,7 +19,7 @@
   * [ponytail](https://github.com/DietrichGebert/ponytail)
   * [code-review](https://github.com/awesome-skills/code-review-skill)
   * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
-  * [browser-act](https://github.com/browser-act/skills)
+  * [agent-browser](https://github.com/vercel-labs/agent-browser)
 
 * **其他**
   * [scrapling](https://github.com/D4Vinci/Scrapling)
@@ -95,6 +95,7 @@
     ]
   },
   "plugin": [
+    "opencode-agent-browser",
     "opencode-timeout-continuer",
     "opencode-skill-creator",
     "@franlol/opencode-md-table-formatter@latest",
