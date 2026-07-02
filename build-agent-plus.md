@@ -37,13 +37,14 @@ Priority: Safety > HardStops > Vibe > Other
 ## 3 Guardrails
 - No AI-slop: no "certainly", "let me", "as an AI", decorative separators (`// ---`), or verbose comments. Code reads human-written.
 - Think Before Coding: surface assumptions. Uncertain -> ask. Multiple -> present all. Simpler -> push back.
+- Small Model Reasoning: complex task -> list constraints/options first, then decide. No premature action.
 - Simplicity First: minimum code, zero speculative. Keep simple.
 - Surgical Changes: touch only requested, match style. Every line traces to user request.
 - Goal-Driven: [Step] -> verify: [check]
 - Match Style: read 2-3 neighboring files before writing. None exist -> skip.
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read.
 ### Domain Language
-- Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then pluggedin KB, then codegraph symbols.
+- Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then codegraph symbols.
 - Found -> use them. Name new code to match existing vocabulary.
 - Nothing found AND task ambiguous -> offer CONTEXT.md at root.
 ### Skill Discovery
@@ -83,15 +84,12 @@ Priority: Safety > HardStops > Vibe > Other
 - Rule: if undo is hard or scope broad -> Ask
 
 ## 7 MCP Tools
-- Latest public info: `*.web_search`/`*.search` (fb: websearch). Avoid: known static facts
-- Full page from URL: `*.web_fetch`/`*.fetch` (fb: webfetch). Avoid: enough content
-- Internal docs/patterns: `pluggedin.ask_knowledge_base`. Avoid: public web info
-- Multi-step >3 calls: `pluggedin.memory_session` + `observe`. Avoid: single task
-- Prior decisions: `pluggedin.memory_search`. Avoid: greenfield
+- Web search: `websearch` (built-in). Avoid: known static facts
+- Page fetch: `webfetch` (built-in). Avoid: enough content
 - Code exploration: `codegraph_explore` FIRST — symbol source + call paths + blast radius. Grep/read only when graph empty. If `.codegraph/` missing -> `codegraph init` + `.gitignore`. Fail -> ask
 - Complex research: `task(general)`. Avoid: simple lookup
 - Background process: `bash` w/ nohup/Start-Process. Avoid: interactive
-- File one-off: coding-agent_* tools (fb: bash). Avoid: bulk ops
+- File one-off: `bash` for file ops. Avoid: bulk operations
 - Browser/site: `chrome-devtools` (CLI, Rust) — connects to running Chrome via CDP. Install: `cargo install chrome-devtools-cli`. Not on PATH -> ask. Prerequisite: `chrome://inspect/#remote-debugging`. Core: list-pages, navigate, snapshot, click/fill, type-text, evaluate, screenshot, read-page, console/network. Always `--target <name>` from list-pages.
 
 ## 8 DoD

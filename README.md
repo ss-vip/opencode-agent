@@ -11,7 +11,6 @@
   * 已建立 `.gitignore` 將 `./temp/` 排除於版本控制之外。
 
 * **`MCP Tools` (常用 MCP)**
-  * [pluggedin](https://github.com/VeriTeknik/pluggedin-plugin)
   * [codegraph](https://github.com/colbymchenry/codegraph)
 
 * **`SKILL` (常用 skills)**
@@ -20,11 +19,6 @@
   * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
   * [chrome-devtools-cli](https://github.com/aeroxy/chrome-devtools-cli)
 
-* **其他**
-  * [scrapling](https://github.com/D4Vinci/Scrapling)
-  * [cloak-browser-mcp](https://npmx.dev/package/@devinwangd/cloak-browser-mcp)
-  * [firecrawl](https://github.com/firecrawl/firecrawl-mcp-server)
-  * [exa-multi-mcp](https://libraries.io/npm/exa-multi-mcp)
 
 ---
 
@@ -53,14 +47,6 @@
     }
   },
   "mcp": {
-    "PluggedinMCP": {
-      "command": ["npx", "-y", "@pluggedin/pluggedin-mcp-proxy"],
-      "enabled": true,
-      "environment": {
-        "PLUGGEDIN_API_KEY": "your-key"
-      },
-      "type": "local"
-    },
     "codegraph": {
       "type": "local",
       "command": [
@@ -111,8 +97,6 @@
   },
   "plugin": [
     "opencode-timeout-continuer",
-    "opencode-skill-creator",
-    "@franlol/opencode-md-table-formatter@latest",
     "./.opencode/plugins/ponytail.mjs"
   ],
   "instructions": [
