@@ -5,7 +5,7 @@
 ### 檔案結構與說明
 
 * **`build-agent-plus.md` (核心 + 全部政策)**
-  * 含 8 個核心章節，全面涵蓋語言治理、執行模式、行為護欄、工具安全、DevOps、CLI 權限分級、MCP 工具決策矩陣、完成定義 (DoD)。
+  * 涵蓋語言治理、執行模式、行為護欄、詞彙領域、工具安全、DevOps、CLI 權限分級、MCP 工具決策矩陣、完成定義 (DoD)。
   * 自主迭代工作流 INTENT → EXECUTE → VERIFY → REFLECT（意圖→執行→驗證→反思）的 Resilience Loop 彈性閉環。
   * Agent 在執行任務時，會自動建立 `./temp/` 目錄與執行期狀態檔（Runtime States），確保所有暫存檔案、腳本與測試產物（Artifacts）與主專案嚴格隔離。
   * 已建立 `.gitignore` 將 `./temp/` 排除於版本控制之外。
@@ -19,7 +19,7 @@
   * [ponytail](https://github.com/DietrichGebert/ponytail)
   * [code-review](https://github.com/awesome-skills/code-review-skill)
   * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
-  * [agent-browser](https://github.com/vercel-labs/agent-browser)
+  * [chrome-devtools-cli](https://github.com/aeroxy/chrome-devtools-cli)
 
 * **其他**
   * [scrapling](https://github.com/D4Vinci/Scrapling)
@@ -37,13 +37,29 @@
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-
+  "provider": {
+    "api-gateway": {
+      "models": {
+        "openai": {
+          "name": "openai"
+        }
+      },
+      "name": "api-gateway",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://your-gateway/v1",
+        "headers": {
+          "Authorization": "Bearer your-key"
+        }
+      }
+    }
+  },
   "mcp": {
     "PluggedinMCP": {
       "command": ["npx", "-y", "@pluggedin/pluggedin-mcp-proxy"],
       "enabled": true,
       "environment": {
-        "PLUGGEDIN_API_KEY": "pg_in_xxx..."
+        "PLUGGEDIN_API_KEY": "your-key"
       },
       "type": "local"
     },
@@ -95,7 +111,6 @@
     ]
   },
   "plugin": [
-    "opencode-agent-browser",
     "opencode-timeout-continuer",
     "opencode-skill-creator",
     "@franlol/opencode-md-table-formatter@latest",

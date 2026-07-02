@@ -24,6 +24,10 @@ Priority: Safety > HardStops > Vibe > Other
 - Paid services: API keys, cloud resources, domains
 - Secrets leak to logs/output
 - 3 consecutive same-type fails or 2 user-rejected attempts
+### Handoff
+- Task/session boundary → `./temp/handoff.md` with compact context for next agent
+### Prototype
+- Unproven design → disposable in `./temp/`, verify before commit
 ### Debiasing
 - NO >3 digit arithmetic, unbounded regex, token-space sort. Use scripts
 
@@ -34,6 +38,10 @@ Priority: Safety > HardStops > Vibe > Other
 - Goal-Driven: [Step] -> verify: [check]
 - Match Style: read 2-3 neighboring files before writing. None exist -> skip
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read
+### Domain Language
+- Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then pluggedin KB, then codegraph symbols
+- Found → internalize; new code naming matches domain vocabulary
+- Nothing found + ambiguous → offer CONTEXT.md at root
 
 ## 4 Tool Safety & Action Log
 - Auto-init: mkdir -p ./temp (Unix) / New-Item -ItemType Directory -Force ./temp (Win) before first write
@@ -53,7 +61,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Post-Task Cleanup: kill registered PIDs, rescan port. BANNED: pkill node, killall, taskkill /IM
 - Paths: Win=%USERPROFILE%+drive. WSL=/mnt/<drive>/. Cross: path.resolve()
 
-## 7 CLI Authority
+## 6 CLI Authority
 - Workspace Isolation: all non-project files -> ./temp/. No artifacts in root/src dirs
 - ./temp/ must be in .gitignore
 - Safe (auto): all tools trusted per config — bypass stdin blocking
@@ -61,7 +69,7 @@ Priority: Safety > HardStops > Vibe > Other
 - PID: kill only spawned PIDs. Unknown -> ps/Get-Process first
 - Rule: if undo is hard or scope broad -> Ask
 
-## 8 MCP Tools
+## 7 MCP Tools
 - Tool naming pattern: `{mcp_server_name}.{tool_name}` — check opencode.json `mcp` section for actual server names
 - Latest public info: `*.web_search` or `*.search` (fb: websearch) | avoid: known static facts
 - Full page from URL: `*.web_fetch` or `*.fetch` (fb: webfetch) | avoid: enough content
@@ -72,14 +80,15 @@ Priority: Safety > HardStops > Vibe > Other
 - Complex research: task(general) | avoid: simple lookup
 - Background process: bash w/ nohup/Start-Process | avoid: interactive
 - File one-off: coding-agent_* tools (fb: bash) | avoid: bulk ops
-- Browser/site automation: `agent-browser` (CLI, Rust) — `agent-browser skills get core` for authoritative usage guide (always version-matched). Core commands: `snapshot`/`snapshot -i` for indexed refs (`@e1`), `click @e2`/`fill @e3 "text"`, `eval` for DOM, `diff` for comparison, `screenshot`. Install: `npm i -g agent-browser` + `agent-browser install`. Use `--profile Default` to reuse Chrome login session. Check PATH first; missing → ask user
+- Browser/site automation: `chrome-devtools` (CLI, Rust) — connects to your running Chrome via CDP, no separate browser process. Core commands: `list-pages` for tab listing, `navigate <url>`/`--back`/`--forward` for navigation, `snapshot` for a11y tree, `click <css>`/`fill <css> <val>` for interaction, `type-text` for React/Vue forms, `evaluate "<js>"` for DOM, `screenshot --output <file>` for visual verify, `read-page` for article markdown, `console`/`network` for inspection. Crucially: always `--target <name>` from `list-pages` output to pin commands to a tab. Install: `cargo install chrome-devtools-cli`. Not on PATH → ask user. Prerequisite: Chrome DevTools remote debugging on (`chrome://inspect/#remote-debugging`).
 
-## 9 DoD
+## 8 DoD
 On completion, output:
 1. What: changes implemented
 2. Why: rationale
 3. Evidence: PID/port release + validation (lint, responsive)
 4. Memory: action.log / defects.md updated
+5. Handoff: ./temp/handoff.md (if session continues)
 - No AI-slop: no "certainly", "let me", "as an AI", decorative separators (`// ---`), or verbose comments. Code reads like a human wrote it
 - Verify: output must be zh-TW; if English detected → re-generate
 - Verify: test files, debug scripts, temp output go ONLY in `./temp/` — never in project root

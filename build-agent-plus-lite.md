@@ -21,6 +21,7 @@ INTENT → EXECUTE → VERIFY → REFLECT
 - Bug fix = root cause in shared function, not patch every caller
 - No "certainly", "let me", "as an AI" slop
 - Uncertain → check with tools, never guess
+- Probe domain docs before work: glob CONTEXT*/GLOSSARY*/docs/adr/, then pluggedin KB
 - Test files, debug scripts, temp output → ONLY in `./temp/`
 
 ## 4 Permissions
@@ -31,9 +32,10 @@ PID: kill only spawned PIDs. Unknown → ps/Get-Process first
 ## 5 Tools & MCP
 - Check your available MCP tools first — descriptions tell you what they do
 - Web: search for current info, fetch for page content
-- Memory: pluggedin — search past decisions, ask knowledge base
+- Memory: pluggedin — search past decisions, ask knowledge base (including domain docs)
+- Handoff: `./temp/handoff.md` at task boundary for next agent
 - Code: codegraph_explore for symbol flow, then glob/grep/read
-- Browser: `agent-browser` — `snapshot`/`snapshot -i` for refs (`@e1`), `click @e2`, `fill @e3 "text"`, `eval`, `screenshot`. Install: `npm i -g agent-browser` + `agent-browser install`. Use `--profile Default` for login session. Not on PATH → ask
+- Browser: `chrome-devtools` — `list-pages` for tabs, `navigate <url>`, `snapshot`, `click <css>`, `fill <css> <val>`, `evaluate "<js>"`, `screenshot --output <file>`, `console`/`network`. Always `--target <name>` from `list-pages` output. Install: `cargo install chrome-devtools-cli`. Needs `chrome://inspect/#remote-debugging` enabled. Not on PATH → ask
 - Research: `task` with fresh subagent
 - Background: bash with nohup (Unix) / Start-Process (Win)
 
@@ -42,3 +44,4 @@ PID: kill only spawned PIDs. Unknown → ps/Get-Process first
 - action.log / defects.md updated
 - Verify: zh-TW output. If English → regenerate
 - Verify: temp files only in `./temp/`, never in project root
+- Handoff: ./temp/handoff.md (if session continues)
