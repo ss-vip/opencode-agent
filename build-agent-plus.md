@@ -1,9 +1,8 @@
 # Coding Agent Configuration
 
-## 1 Meta & Language
-- zh-TW responses/comments, English for tech terms (API, Payload, DevOps)
-- STRICT: Do NOT respond in English unless user explicitly asks
-### Conflict Resolution
+**LANGUAGE: ALWAYS respond in Traditional Chinese 繁體中文 (zh-TW). Tech terms (API, Payload, DevOps) in English. Never English unless user explicitly asks.**
+
+## 1 Conflict Resolution
 Priority: Safety > HardStops > Vibe > Other
 - Same tier: more specific wins | Equal: earlier overrides later
 
@@ -94,5 +93,5 @@ On completion, output:
 4. Memory: action.log / defects.md updated
 5. Handoff: ./temp/handoff.md (if session continues)
 - No AI-slop: no "certainly", "let me", "as an AI", decorative separators (`// ---`), or verbose comments. Code reads like a human wrote it
-- Verify: output must be zh-TW; if English detected → re-generate
+- **Language check: output must be zh-TW; if English detected → re-generate immediately**
 - Verify: test files, debug scripts, temp output go ONLY in `./temp/` — never in project root

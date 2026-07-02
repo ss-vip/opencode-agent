@@ -85,7 +85,8 @@
   "default_agent": "build",
   "compaction": {
     "auto": true,
-    "prune": true
+    "prune": true,
+    "reserved": 10000
   },
   "watcher": {
     "ignore": [
