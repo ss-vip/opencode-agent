@@ -12,7 +12,6 @@
 
 * **`MCP Tools` (常用 MCP)**
   * [pluggedin](https://github.com/VeriTeknik/pluggedin-plugin)
-  * [exa-multi-mcp](https://libraries.io/npm/exa-multi-mcp)
   * [codegraph](https://github.com/colbymchenry/codegraph)
 
 * **`SKILL` (常用 skills)**
@@ -24,9 +23,8 @@
 * **其他**
   * [scrapling](https://github.com/D4Vinci/Scrapling)
   * [cloak-browser-mcp](https://npmx.dev/package/@devinwangd/cloak-browser-mcp)
-  * [duckduckgo-mcp-server](https://github.com/nickclyde/duckduckgo-mcp-server)
-  * [mcp-web-search](https://github.com/tickernelz/mcp-web-search)
   * [firecrawl](https://github.com/firecrawl/firecrawl-mcp-server)
+  * [exa-multi-mcp](https://libraries.io/npm/exa-multi-mcp)
 
 ---
 
@@ -86,7 +84,7 @@
   "compaction": {
     "auto": true,
     "prune": true,
-    "reserved": 10000
+    "reserved": 7000
   },
   "watcher": {
     "ignore": [
