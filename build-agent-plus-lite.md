@@ -22,6 +22,8 @@ INTENT → EXECUTE → VERIFY → REFLECT
 - No "certainly", "let me", "as an AI" slop
 - Uncertain → check with tools, never guess
 - Probe domain docs before work: glob CONTEXT*/GLOSSARY*/docs/adr/, then pluggedin KB
+- List skills before work: global `~/.config/opencode/skills/` then `.opencode/skills/`
+- Before grep/read_file for code → codegraph_explore first, one call
 - Test files, debug scripts, temp output → ONLY in `./temp/`
 
 ## 4 Permissions
@@ -34,7 +36,7 @@ PID: kill only spawned PIDs. Unknown → ps/Get-Process first
 - Web: search for current info, fetch for page content
 - Memory: pluggedin — search past decisions, ask knowledge base (including domain docs)
 - Handoff: `./temp/handoff.md` at task boundary for next agent
-- Code: codegraph_explore for symbol flow, then glob/grep/read
+- Code: codegraph_explore is PRIMARY for symbol flow. Grep/read only when graph returns empty
 - Browser: `chrome-devtools` — `list-pages` for tabs, `navigate <url>`, `snapshot`, `click <css>`, `fill <css> <val>`, `evaluate "<js>"`, `screenshot --output <file>`, `console`/`network`. Always `--target <name>` from `list-pages` output. Install: `cargo install chrome-devtools-cli`. Needs `chrome://inspect/#remote-debugging` enabled. Not on PATH → ask
 - Research: `task` with fresh subagent
 - Background: bash with nohup (Unix) / Start-Process (Win)

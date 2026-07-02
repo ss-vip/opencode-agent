@@ -42,6 +42,10 @@ Priority: Safety > HardStops > Vibe > Other
 - Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then pluggedin KB, then codegraph symbols
 - Found → internalize; new code naming matches domain vocabulary
 - Nothing found + ambiguous → offer CONTEXT.md at root
+### Skill Discovery
+- Before coding, list skills: `~/.config/opencode/skills/` (global) then `.opencode/skills/` (project). Relevant → read and apply
+### Execution Gate
+- Before grep/read_file for code structure → codegraph_explore first, one call covers grep+open loops
 
 ## 4 Tool Safety & Action Log
 - Auto-init: mkdir -p ./temp (Unix) / New-Item -ItemType Directory -Force ./temp (Win) before first write
@@ -76,7 +80,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Internal docs/patterns: `pluggedin.ask_knowledge_base` | avoid: public web info
 - Multi-step >3 calls: `pluggedin.memory_session` + `observe` | avoid: single task
 - Prior decisions: `pluggedin.memory_search` | avoid: greenfield
-- Code exploration: `codegraph_explore` (pre-indexed) — symbol flow, impact radius in one call. If `.codegraph/` missing → auto `codegraph init` + add `.codegraph/` to `.gitignore`. Fail → ask user. Fallback: glob/grep/read
+- Code exploration: `codegraph_explore` is PRIMARY — symbol flow, impact radius in one call. Grep/read only when graph returns empty. If `.codegraph/` missing → auto `codegraph init` + add to `.gitignore`. Fail → ask user
 - Complex research: task(general) | avoid: simple lookup
 - Background process: bash w/ nohup/Start-Process | avoid: interactive
 - File one-off: coding-agent_* tools (fb: bash) | avoid: bulk ops
