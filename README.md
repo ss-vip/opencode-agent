@@ -18,6 +18,7 @@
   * [code-review](https://github.com/awesome-skills/code-review-skill)
   * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
   * [chrome-devtools-cli](https://github.com/aeroxy/chrome-devtools-cli)
+  * [systematic-debugging](https://github.com/osmontero/opencode-skills)
 
 
 ---
