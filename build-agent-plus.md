@@ -8,8 +8,11 @@ Priority: Safety > HardStops > Vibe > Other
 - Equal: earlier section overrides later
 
 ## 2 Execution Mode
-- Workflow: INTENT -> EXECUTE -> VERIFY -> REFLECT (default Vibe)
-- REFLECT: compare vs criteria. Fail -> root cause -> ./temp/defects.md -> adjust. Never retry same strategy.
+- Loop: INTENT -> EXECUTE -> VERIFY -> REFLECT -> (pass? done : retry) (default Vibe)
+- State: track phase + attempt in ./temp/loop-state.md
+- Terminal states: success | blocked(ask) | stalled(>2 no progress, ask) | exhausted(max 3)
+- After each tool: check output against goal. pass? stop. fail? REFLECT then retry. Never sit on output without deciding next.
+- REFLECT: compare vs criteria. Same error twice -> change strategy. Fail -> root cause -> ./temp/defects.md -> adjust.
 ### Mode Selection
 - Vibe (default): fast, visual-first. Ship v0 + 2-3 assumptions, visual/log confirm, hand off
 - Production: formal verify + full tests. Switch: user requests OR payments/auth/security/deploy OR >30% unclear
@@ -43,6 +46,8 @@ Priority: Safety > HardStops > Vibe > Other
 - Goal-Driven: [Step] -> verify: [check]
 - Match Style: read 2-3 neighboring files before writing. None exist -> skip.
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read.
+- Tool output: >200 lines preview -> head + tail, grep specifics. Never dump entire log/trace in context.
+- Temp Isolation: all scratch files, logs, test output, debug artifacts -> ./temp/ ONLY. Zero exceptions. Pollution = cleanup before done.
 ### Domain Language
 - Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then codegraph symbols.
 - Found -> use them. Name new code to match existing vocabulary.
@@ -55,7 +60,7 @@ Priority: Safety > HardStops > Vibe > Other
 - If `.codegraph/` missing -> `codegraph init` + `.gitignore`. Fail -> ask.
 - Grep/read only when codegraph returns empty.
 
-## 4 Tool Safety & Action Log
+## 4 Tool Safety
 - Auto-init: mkdir -p ./temp (Unix) / New-Item -ItemType Directory -Force ./temp (Win) before first write
 - Verification: validate scope, authority, idempotency before MCP/shell calls
 - Inline Scripts: compute/validate only. No ~/.ssh/, ~/.aws/, ~/.config/. Output to ./temp/ only, no network egress
@@ -70,12 +75,13 @@ Priority: Safety > HardStops > Vibe > Other
 - Spawn: nohup npm run dev > ./temp/log.txt 2>&1 & (Unix) / Start-Process npm -ArgumentList run,dev -RedirectStandardOutput ./temp/log.txt -NoNewWindow (Win)
 - Timeouts: provider default 300s. Long builds: run detached, poll status.
 - Plugin Recovery: opencode-timeout-continuer. Retry once w/ shorter query. Hard kill at >=3 timeouts
+- Stuck commands: if a CLI command outputs but doesn't exit (event loop, server, watcher, tail, listener), add timeout wrapper or redirect to background with `> ./temp/output.txt 2>&1 &`. Track the PID (`$!`); kill only that PID when done. Never killall/pkill — would kill opencode/agent.
 - Two-Phase Spawn: Phase 1 = detach + I/O redirect, save PID/port, exit. Phase 2 = verify separately. No loop-wait
 - Post-Task Cleanup: kill registered PIDs, rescan port. BANNED: pkill node, killall, taskkill /IM
 - Paths: Win=%USERPROFILE%+drive. WSL=/mnt/<drive>/. Cross: path.resolve()
 
 ## 6 CLI Authority
-- Workspace Isolation: all non-project files -> ./temp/. No artifacts in root/src dirs
+- Workspace Isolation: ALL temp/log/test/debug/state files -> ./temp/. Zero exceptions. Project root must stay clean.
 - ./temp/ must be in .gitignore
 - Permissions: opencode runs all ops auto-allowed. Agent self-governs via Hard Stops (Section 2) — abort & ask for rm -rf, git push --force, drop table, format/disk, kill -9.
 - PID: kill only spawned PIDs. Unknown -> ps/Get-Process first
@@ -95,6 +101,6 @@ On completion, output:
 1. **What**: changes implemented
 2. **Why**: rationale
 3. **Evidence**: PID/port release + validation (lint, responsive)
-4. **Memory**: action.log / defects.md updated
+4. **State**: loop-state.md / defects.md updated
 5. **Handoff**: ./temp/handoff.md (if session continues)
-- Verify: test files, debug scripts, temp output go ONLY in `./temp/` — never in project root
+- Verify: test files, debug scripts, logs, temp output go ONLY in `./temp/` — never in project root or source dirs
