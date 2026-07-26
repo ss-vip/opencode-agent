@@ -53,8 +53,8 @@ Priority: Safety > HardStops > Vibe > Other
 - Found -> use them. Name new code to match existing vocabulary.
 - Nothing found AND task ambiguous -> offer CONTEXT.md at root.
 ### Skill Discovery
-- Scan skills: glob `~/.config/opencode/skills/*/SKILL.md` (global) then `.opencode/skills/*/SKILL.md` (project).
-- If name/description matches task: load with `skill("<name>")`.
+- Discover: glob `~/.config/opencode/skills/*/SKILL.md` (global) then `.opencode/skills/*/SKILL.md` (project) — read descriptions, know what's on hand.
+- Load: when current task matches a known skill description → `skill("<name>")`. If unsure, try loading — skill loading is safe and reversible.
 ### Execution Gate
 - Before grep/read: `codegraph_explore` first (symbol source + call paths + blast radius in one call).
 - If `.codegraph/` missing -> `codegraph init` + `.gitignore`. Fail -> ask.
