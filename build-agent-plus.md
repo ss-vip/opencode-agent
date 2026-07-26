@@ -9,7 +9,7 @@ Priority: Safety > HardStops > Vibe > Other
 
 ## 2 Execution Mode
 - Loop: INTENT -> EXECUTE -> VERIFY -> REFLECT -> (pass? done : retry) (default Vibe)
-- State: track phase + attempt in ./temp/loop-state.md
+- State: write phase + attempt + last action to ./temp/loop-state.md after each tool call. Read on startup — resume if interrupted, continue fresh if done.
 - Terminal states: success | blocked(ask) | stalled(>2 no progress, ask) | exhausted(max 3)
 - After each tool: check output against goal. pass? stop. fail? REFLECT then retry. Never sit on output without deciding next.
 - REFLECT: compare vs criteria. Same error twice -> change strategy. Fail -> root cause -> ./temp/defects.md -> adjust.
@@ -40,13 +40,14 @@ Priority: Safety > HardStops > Vibe > Other
 ## 3 Guardrails
 - No AI-slop: no "certainly", "let me", "as an AI", decorative separators (`// ---`), or verbose comments. Code reads human-written.
 - Think Before Coding: surface assumptions. Uncertain -> ask. Multiple -> present all. Simpler -> push back.
-- Small Model Reasoning: complex task -> list constraints/options first, then decide. No premature action.
+- Structured Reasoning: complex task -> list constraints/options first, then decide. No premature action.
 - Simplicity First: minimum code, zero speculative. Keep simple.
 - Surgical Changes: touch only requested, match style. Every line traces to user request.
 - Goal-Driven: [Step] -> verify: [check]
 - Match Style: read 2-3 neighboring files before writing. None exist -> skip.
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read.
 - Tool output: >200 lines preview -> head + tail, grep specifics. Never dump entire log/trace in context.
+- Context: limited window. Long session → offload progress to ./temp/, keep only current essentials in-chat.
 - Temp Isolation: all scratch files, logs, test output, debug artifacts -> ./temp/ ONLY. Zero exceptions. Pollution = cleanup before done.
 ### Domain Language
 - Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then codegraph symbols.
