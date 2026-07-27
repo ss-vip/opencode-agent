@@ -12,6 +12,7 @@
 
 * **`MCP Tools` (常用 MCP)**
   * [codegraph](https://github.com/colbymchenry/codegraph)
+  * [plugged.in](https://plugged.in/)
 
 * **`SKILL` (常用 skills)**
   * [ponytail](https://github.com/DietrichGebert/ponytail)
@@ -56,6 +57,18 @@
         "--mcp"
       ],
       "enabled": true
+    },
+    "PluggedinMCP": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@pluggedin/pluggedin-mcp-proxy"
+      ],
+      "env": {
+        "PLUGGEDIN_API_KEY": "pg_in_xxx"
+      },
+      "enabled": true
     }
   },
   "agent": {
@@ -98,7 +111,7 @@
   },
   "plugin": [
     "opencode-timeout-continuer",
-    "./.opencode/plugins/ponytail.mjs"
+    "@dietrichgebert/ponytail"
   ],
   "instructions": [
     "https://raw.githubusercontent.com/ss-vip/opencode-agent/refs/heads/main/build-agent-plus.md"

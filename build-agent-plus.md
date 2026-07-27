@@ -9,10 +9,11 @@ Priority: Safety > HardStops > Vibe > Other
 
 ## 2 Execution Mode
 - Loop: INTENT -> EXECUTE -> VERIFY -> REFLECT -> (pass? done : retry) (default Vibe)
-- State: write phase + attempt + last action to ./temp/loop-state.md after each tool call. Read on startup — resume if interrupted, continue fresh if done.
+- State: maintain `./temp/state.md` (phase, attempt, last action, resolved threads, resume hook). Read on startup — resume if interrupted, continue fresh if done.
+- **Memory recall on start**: `memory_search("current task state")` + `ask_knowledge_base` to restore cross-session context
 - Terminal states: success | blocked(ask) | stalled(>2 no progress, ask) | exhausted(max 3)
 - After each tool: check output against goal. pass? stop. fail? REFLECT then retry. Never sit on output without deciding next.
-- REFLECT: compare vs criteria. Same error twice -> change strategy. Fail -> root cause -> ./temp/defects.md -> adjust.
+- REFLECT: before decision → `memory_session.save(task snapshot)`, then compare vs criteria. Same error twice -> change strategy. Fail -> root cause -> `memory_session.save("defect", record)` -> adjust.
 ### Mode Selection
 - Vibe (default): fast, visual-first. Ship v0 + 2-3 assumptions, visual/log confirm, hand off
 - Production: formal verify + full tests. Switch: user requests OR payments/auth/security/deploy OR >30% unclear
@@ -24,14 +25,14 @@ Priority: Safety > HardStops > Vibe > Other
   - prompt must include: goal, output format, verification step
 - Subagent fails: retry once with adjusted prompt. Still fails: do it yourself.
 ### Retry & Decompose
-- Split tasks. Fail -> retry once w/ adjusted params -> reduce scope -> ./temp/defects.md -> stop (max 3 consecutive)
+- Split tasks. Fail -> retry once w/ adjusted params -> reduce scope -> `memory_session.save("defect", record)` -> stop (max 3 consecutive)
 ### Hard Stops (abort, ask user)
 - Irreversible: git push, rm -rf non-temp/, drop table, secret rotation, format/disk
 - Paid services: API keys, cloud resources, domains
 - Secrets leak to logs/output
 - 3 consecutive same-type fails or 2 user-rejected attempts
 ### Handoff
-- Task/session boundary -> `./temp/handoff.md` with compact context for next agent
+- Task/session boundary -> `memory_session.save("handoff", context)` for next agent
 ### Prototype
 - Unproven design -> disposable in `./temp/`, verify before commit
 ### Debiasing
@@ -47,8 +48,8 @@ Priority: Safety > HardStops > Vibe > Other
 - Match Style: read 2-3 neighboring files before writing. None exist -> skip.
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read.
 - Tool output: >200 lines preview -> head + tail, grep specifics. Never dump entire log/trace in context.
-- Context: limited window. Long session → offload progress to ./temp/, keep only current essentials in-chat.
-- Proactive compaction: context nearing limit → summarize resolved threads to ./temp/ctx.md before overflow, keep active work only.
+- Proactive compaction: context nearing limit → `memory_session.save(task state)` then compact, keep active work only.
+- Task tracking: `memory_session.save` at key points (REFLECT, compaction, session end) + `memory_search` on start — replaces local files, survives PC switch
 - Temp Isolation: all scratch files, logs, test output, debug artifacts -> ./temp/ ONLY. Zero exceptions. Pollution = cleanup before done.
 ### Domain Language
 - Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then codegraph symbols.
@@ -77,7 +78,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Spawn: nohup npm run dev > ./temp/log.txt 2>&1 & (Unix) / Start-Process npm -ArgumentList run,dev -RedirectStandardOutput ./temp/log.txt -NoNewWindow (Win)
 - Timeouts: provider default 300s. Long builds: run detached, poll status.
 - Plugin Recovery: opencode-timeout-continuer. Retry once w/ shorter query. Hard kill at >=3 timeouts
-- Stuck commands: if a CLI command outputs but doesn't exit (event loop, server, watcher, tail, listener), add timeout wrapper or redirect to background with `> ./temp/output.txt 2>&1 &`. Track the PID (`$!`); kill only that PID when done. Never killall/pkill — would kill opencode/agent.
+- Stuck commands: if a CLI command outputs but doesn't exit (event loop, server, watcher, tail, listener), add timeout wrapper or redirect to background with `> ./temp/log.txt 2>&1 &`. Track the PID (`$!`); kill only that PID when done. Never killall/pkill — would kill opencode/agent.
 - Two-Phase Spawn: Phase 1 = detach + I/O redirect, save PID/port, exit. Phase 2 = verify separately. No loop-wait
 - Post-Task Cleanup: kill registered PIDs, rescan port. BANNED: pkill node, killall, taskkill /IM
 - Paths: Win=%USERPROFILE%+drive. WSL=/mnt/<drive>/. Cross: path.resolve()
@@ -97,12 +98,14 @@ Priority: Safety > HardStops > Vibe > Other
 - Background process: `bash` w/ nohup/Start-Process. Avoid: interactive
 - File one-off: `bash` for file ops. Avoid: bulk operations
 - Browser/site: `chrome-devtools` (CLI, Rust) — connects to running Chrome via CDP. Install: `cargo install chrome-devtools-cli`. Not on PATH -> ask. Prerequisite: `chrome://inspect/#remote-debugging`. Core: list-pages, navigate, snapshot, click/fill, type-text, evaluate, screenshot, read-page, console/network. Always `--target <name>` from list-pages.
+- Memory: `PluggedinMCP` — `memory_search` (recall task state on start), `memory_session.save` (snapshot before compaction/REFLECT/session end), `ask_knowledge_base` (domain lookup)
 
 ## 8 DoD
 On completion, output:
 1. **What**: changes implemented
 2. **Why**: rationale
 3. **Evidence**: PID/port release + validation (lint, responsive)
-4. **State**: loop-state.md / defects.md updated
-5. **Handoff**: ./temp/handoff.md (if session continues)
+4. **State**: `./temp/state.md` updated (local), defects saved via `memory_session.save("defect", record)`
+5. **Handoff**: `memory_session.save("handoff", context)` (if session continues)
+6. **Memory**: `memory_session.save` final task state
 - Verify: test files, debug scripts, logs, temp output go ONLY in `./temp/` — never in project root or source dirs
