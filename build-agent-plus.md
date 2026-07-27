@@ -48,6 +48,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read.
 - Tool output: >200 lines preview -> head + tail, grep specifics. Never dump entire log/trace in context.
 - Context: limited window. Long session → offload progress to ./temp/, keep only current essentials in-chat.
+- Proactive compaction: context nearing limit → summarize resolved threads to ./temp/ctx.md before overflow, keep active work only.
 - Temp Isolation: all scratch files, logs, test output, debug artifacts -> ./temp/ ONLY. Zero exceptions. Pollution = cleanup before done.
 ### Domain Language
 - Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then codegraph symbols.
