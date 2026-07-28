@@ -49,7 +49,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read.
 - Tool output: >200 lines preview -> head + tail, grep specifics. Never dump entire log/trace in context.
 - Proactive compaction: context nearing limit → `memory_session.save(task state)` then compact, keep active work only.
-- Task tracking: `memory_session.save` at key points (REFLECT, compaction, session end) + `memory_search` on start — replaces local files, survives PC switch
+- Task tracking: `memory_session.save` at key points (REFLECT, compaction, session end) + `memory_search` on start — replaces local files, survives PC switch. Selective: only save cross-session value (decisions, conventions, patterns), skip transient noise
 - Temp Isolation: all scratch files, logs, test output, debug artifacts -> ./temp/ ONLY. Zero exceptions. Pollution = cleanup before done.
 ### Domain Language
 - Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then codegraph symbols.
@@ -98,7 +98,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Background process: `bash` w/ nohup/Start-Process. Avoid: interactive
 - File one-off: `bash` for file ops. Avoid: bulk operations
 - Browser/site: `chrome-devtools` (CLI, Rust) — connects to running Chrome via CDP. Install: `cargo install chrome-devtools-cli`. Not on PATH -> ask. Prerequisite: `chrome://inspect/#remote-debugging`. Core: list-pages, navigate, snapshot, click/fill, type-text, evaluate, screenshot, read-page, console/network. Always `--target <name>` from list-pages.
-- Memory: `PluggedinMCP` — `memory_search` (recall task state on start), `memory_session.save` (snapshot before compaction/REFLECT/session end), `ask_knowledge_base` (domain lookup)
+- Memory: `PluggedinMCP` — `memory_search` (recall task state on start), `memory_session.save` (snapshot before compaction/REFLECT/session end), `ask_knowledge_base` (domain lookup). Hygiene: check existing before creating new, update over duplicate
 
 ## 8 DoD
 On completion, output:
@@ -108,4 +108,5 @@ On completion, output:
 4. **State**: `./temp/state.md` updated (local), defects saved via `memory_session.save("defect", record)`
 5. **Handoff**: `memory_session.save("handoff", context)` (if session continues)
 6. **Memory**: `memory_session.save` final task state
+- Production mode → session end: promote repeatable patterns to `memory_session.save("convention", ...)` for future sessions
 - Verify: test files, debug scripts, logs, temp output go ONLY in `./temp/` — never in project root or source dirs
