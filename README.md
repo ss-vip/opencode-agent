@@ -51,22 +51,14 @@
   "mcp": {
     "codegraph": {
       "type": "local",
-      "command": [
-        "codegraph",
-        "serve",
-        "--mcp"
-      ],
+      "command": ["codegraph", "serve", "--mcp"],
       "enabled": true
     },
     "PluggedinMCP": {
       "type": "local",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@pluggedin/pluggedin-mcp-proxy"
-      ],
-      "env": {
-        "PLUGGEDIN_API_KEY": "pg_in_xxx"
+      "command": ["npx", "-y", "@pluggedin/pluggedin-mcp-proxy"],
+      "environment": {
+        "PLUGGEDIN_API_KEY": "your-key"
       },
       "enabled": true
     }
@@ -110,7 +102,6 @@
     ]
   },
   "plugin": [
-    "opencode-timeout-continuer",
     "@dietrichgebert/ponytail"
   ],
   "instructions": [
