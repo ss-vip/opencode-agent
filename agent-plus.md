@@ -23,12 +23,12 @@ Priority: Safety > HardStops > Vibe > Other
 - Context: `memory_search` + `ask_knowledge_base` on start; save plan via `memory_observe("workflow_step", plan)` if session long
 - End turn only with a question or `plan_exit`. Handoff: end with execute-ready brief so build mode picks up without re-asking
 ### Parallel & Subagent
-- Complex work (>5 files): spawn subagent per task via `task` tool — fresh context, no garbage buildup
-- Independent: same wave -> parallel. Dependent: sequential. Single file or debug: skip subagent
-- `task(description, prompt, subagent_type)`:
-  - "explore" for code/file search, "general" for multi-step work
-  - prompt must include: goal, output format, verification step
-- Subagent fails: retry once with adjusted prompt. Still fails: do it yourself.
+- Auto-delegate before burning context: heavy reading/research (many files, >200-line reads) -> `task(explore)`, consume only its conclusion
+- "explore" = read-only search/research; "general" = full tools (can edit), for independent work units running parallel to your main line
+- Independent -> same wave, parallel. Dependent -> sequential. Single file or debug -> no subagent
+- `task(description, prompt, subagent_type)`: prompt must include goal, output format, verification step
+- Subagent fails: retry once w/ adjusted prompt. Still fails: do it yourself.
+- Subagents never spawn subagents; always return summaries, not raw dumps. Review general's edits via `git diff` before accepting
 ### Retry & Decompose
 - Split tasks. Fail -> retry once w/ adjusted params -> reduce scope -> `memory_observe("failure_pattern", defect)` -> stop (max 3 consecutive)
 ### Hard Stops (abort, ask user)

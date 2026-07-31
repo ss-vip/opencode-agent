@@ -6,7 +6,7 @@
 
 * **`agent-plus.md` (核心 + 全部政策)**
   * 涵蓋語言治理、衝突解決優先級、執行模式（Vibe/Production/Plan Mode）、行為護欄、領域語言、工具安全、DevOps、CLI 權限自管、MCP 工具決策矩陣、完成定義 (DoD)。
-  * 自主迭代工作流 INTENT → EXECUTE → VERIFY → REFLECT（意圖→執行→驗證→反思）的 Resilience Loop 彈性閉環。
+  * 自主迭代工作流 INTENT → EXECUTE → VERIFY → REFLECT（意圖→執行→驗證→反思）。
   * Agent 在執行任務時，會建立 `./temp/` 目錄隔離所有暫存檔案、腳本與測試產物（Artifacts）；執行期狀態（phase/attempt/resume hook）改由 plugged.in 記憶系統（`memory_observe`）跨 PC 同步，不再寫本機狀態檔。
   * 已建立 `.gitignore` 將 `./temp/` 與 `.codegraph/` 排除於版本控制之外。
 
@@ -91,6 +91,7 @@
     "ignore": [
       "node_modules/**",
       "dist/**",
+      ".next/**",
       ".git/**",
       ".DS_Store",
       "Thumbs.db",
@@ -103,11 +104,18 @@
       "__pycache__/**",
       "*.pyc",
       ".pytest_cache/**",
+      ".venv/**",
+      "venv/**",
+      ".mypy_cache/**",
+      "target/**",
+      "build/**",
       "obj/**",
       "bin/**",
       "*.tsbuildinfo",
       ".vercel/**",
-      ".netlify/**"
+      ".netlify/**",
+      "temp/**",
+      ".codegraph/**"
     ]
   },
   "plugin": [
