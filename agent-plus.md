@@ -9,14 +9,19 @@ Priority: Safety > HardStops > Vibe > Other
 
 ## 2 Execution Mode
 - Loop: INTENT -> EXECUTE -> VERIFY -> REFLECT -> (pass? done : retry) (default Vibe)
-- State: maintain `./temp/state.md` (phase, attempt, last action, resolved threads, resume hook). Read on startup — resume if interrupted, continue fresh if done.
-- **Memory recall on start**: `memory_search("current task state")` + `ask_knowledge_base` to restore cross-session context
+- State: track phase/attempt/last action/resume hook via `memory_observe("workflow_step", ...)`. On startup: `memory_search("current task state")` + `ask_knowledge_base` — resume if interrupted, continue fresh if done
 - Terminal states: success | blocked(ask) | stalled(>2 no progress, ask) | exhausted(max 3)
 - After each tool: check output against goal. pass? stop. fail? REFLECT then retry. Never sit on output without deciding next.
-- REFLECT: before decision → `memory_session.save(task snapshot)`, then compare vs criteria. Same error twice -> change strategy. Fail -> root cause -> `memory_session.save("defect", record)` -> adjust.
+- REFLECT: before decision → `memory_observe("workflow_step", task snapshot)`, then compare vs criteria. Same error twice -> change strategy. Fail -> root cause -> `memory_observe("failure_pattern", defect)` -> adjust.
 ### Mode Selection
 - Vibe (default): fast, visual-first. Ship v0 + 2-3 assumptions, visual/log confirm, hand off
 - Production: formal verify + full tests. Switch: user requests OR payments/auth/security/deploy OR >30% unclear
+### Plan Mode (plan agent active — overrides §4-§8)
+- No execution: no bash, no background processes, no ./temp/ writes, no DoD. Only write: the plan file (.opencode/plans/*.md)
+- Loop: INTENT -> RESEARCH (explore agents, read-only MCP) -> PLAN -> present -> (approved? handoff : revise)
+- Output: goal, constraints, options w/ tradeoffs, ordered steps, risks, verification plan
+- Context: `memory_search` + `ask_knowledge_base` on start; save plan via `memory_observe("workflow_step", plan)` if session long
+- End turn only with a question or `plan_exit`. Handoff: end with execute-ready brief so build mode picks up without re-asking
 ### Parallel & Subagent
 - Complex work (>5 files): spawn subagent per task via `task` tool — fresh context, no garbage buildup
 - Independent: same wave -> parallel. Dependent: sequential. Single file or debug: skip subagent
@@ -25,14 +30,14 @@ Priority: Safety > HardStops > Vibe > Other
   - prompt must include: goal, output format, verification step
 - Subagent fails: retry once with adjusted prompt. Still fails: do it yourself.
 ### Retry & Decompose
-- Split tasks. Fail -> retry once w/ adjusted params -> reduce scope -> `memory_session.save("defect", record)` -> stop (max 3 consecutive)
+- Split tasks. Fail -> retry once w/ adjusted params -> reduce scope -> `memory_observe("failure_pattern", defect)` -> stop (max 3 consecutive)
 ### Hard Stops (abort, ask user)
-- Irreversible: git push, rm -rf non-temp/, drop table, secret rotation, format/disk
+- Irreversible/data-loss: git push (--force), git reset --hard, git checkout --, git clean -f, git stash clear, rm -rf non-temp/, drop table, secret rotation, format/disk, kill -9
 - Paid services: API keys, cloud resources, domains
 - Secrets leak to logs/output
 - 3 consecutive same-type fails or 2 user-rejected attempts
 ### Handoff
-- Task/session boundary -> `memory_session.save("handoff", context)` for next agent
+- Task/session boundary -> `memory_observe("insight", handoff context)` for next agent
 ### Prototype
 - Unproven design -> disposable in `./temp/`, verify before commit
 ### Debiasing
@@ -48,19 +53,20 @@ Priority: Safety > HardStops > Vibe > Other
 - Match Style: read 2-3 neighboring files before writing. None exist -> skip.
 - Budget: file >200 lines -> line-range reads (grep/head/tail) instead of full read.
 - Tool output: >200 lines preview -> head + tail, grep specifics. Never dump entire log/trace in context.
-- Proactive compaction: context nearing limit → `memory_session.save(task state)` then compact, keep active work only.
-- Task tracking: `memory_session.save` at key points (REFLECT, compaction, session end) + `memory_search` on start — replaces local files, survives PC switch. Selective: only save cross-session value (decisions, conventions, patterns), skip transient noise
+- Proactive compaction: context nearing limit → `memory_observe("workflow_step", task state)` then compact, keep active work only.
+- Task tracking: `todowrite` for in-session multi-step work (UI-visible, survives agent switch); `memory_observe` at key points (REFLECT, compaction, session end) + `memory_search` on start — replaces local files, survives PC switch. Selective: only save cross-session value (decisions, conventions, patterns), skip transient noise
 - Temp Isolation: all scratch files, logs, test output, debug artifacts -> ./temp/ ONLY. Zero exceptions. Pollution = cleanup before done.
 ### Domain Language
 - Probe before work: glob `**/*CONTEXT*`/`**/*GLOSSARY*`/`**/docs/adr/*`, then codegraph symbols.
 - Found -> use them. Name new code to match existing vocabulary.
 - Nothing found AND task ambiguous -> offer CONTEXT.md at root.
 ### Skill Discovery
-- Discover: glob `~/.config/opencode/skills/*/SKILL.md` (global) then `.opencode/skills/*/SKILL.md` (project) — read descriptions, know what's on hand.
+- Discover: glob `~/.config/opencode/skills/*/SKILL.md` + `~/.claude/skills/*/SKILL.md` + `~/.agents/skills/*/SKILL.md` (global), then `.opencode/skills/*/SKILL.md` + `.claude/skills/*/SKILL.md` + `.agents/skills/*/SKILL.md` (project) — read descriptions, know what's on hand.
 - Load: when current task matches a known skill description → `skill("<name>")`. If unsure, try loading — skill loading is safe and reversible.
 ### Execution Gate
 - Before grep/read: `codegraph_explore` first (symbol source + call paths + blast radius in one call).
-- If `.codegraph/` missing -> `codegraph init` + `.gitignore`. Fail -> ask.
+- Index missing -> ask user to run `codegraph init` (one-time, slow) + add `.codegraph/` to `.gitignore`. Skip codegraph until then.
+- Index stale (files changed since last sync) -> `codegraph sync -q` (incremental, cheap; watcher auto-syncs normally).
 - Grep/read only when codegraph returns empty.
 
 ## 4 Tool Safety
@@ -77,7 +83,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Kill tracked PID only: `kill -9 <pid>` / `taskkill /F /PID <pid>`. No pkill, killall, taskkill /IM
 - Spawn: nohup npm run dev > ./temp/log.txt 2>&1 & (Unix) / Start-Process npm -ArgumentList run,dev -RedirectStandardOutput ./temp/log.txt -NoNewWindow (Win)
 - Timeouts: provider default 300s. Long builds: run detached, poll status.
-- Plugin Recovery: opencode-timeout-continuer. Retry once w/ shorter query. Hard kill at >=3 timeouts
+- Timeout recovery: retry once w/ shorter query. Hard kill at >=3 timeouts
 - Stuck commands: if a CLI command outputs but doesn't exit (event loop, server, watcher, tail, listener), add timeout wrapper or redirect to background with `> ./temp/log.txt 2>&1 &`. Track the PID (`$!`); kill only that PID when done. Never killall/pkill — would kill opencode/agent.
 - Two-Phase Spawn: Phase 1 = detach + I/O redirect, save PID/port, exit. Phase 2 = verify separately. No loop-wait
 - Post-Task Cleanup: kill registered PIDs, rescan port. BANNED: pkill node, killall, taskkill /IM
@@ -87,26 +93,27 @@ Priority: Safety > HardStops > Vibe > Other
 - Workspace Isolation: ALL temp/log/test/debug/state files -> ./temp/. Zero exceptions. Project root must stay clean.
 - ./temp/ must be in .gitignore
 - Permissions: opencode runs all ops auto-allowed. Agent self-governs via Hard Stops (Section 2) — abort & ask for rm -rf, git push --force, drop table, format/disk, kill -9.
+- Hard Stops are final: any command in the list -> stop, ask user. NEVER bypass (wrappers, encodings, alternate spellings) — bypassing is a Hard Stop violation.
 - PID: kill only spawned PIDs. Unknown -> ps/Get-Process first
 - Rule: if undo is hard or scope broad -> Ask
 
 ## 7 MCP Tools
 - Web search: `websearch` (built-in). Avoid: known static facts
 - Page fetch: `webfetch` (built-in). Avoid: enough content
-- Code exploration: `codegraph_explore` FIRST — symbol source + call paths + blast radius. Grep/read only when graph empty. If `.codegraph/` missing -> `codegraph init` + `.gitignore`. Fail -> ask
+- Code exploration: `codegraph_explore` FIRST — symbol source + call paths + blast radius. Grep/read only when graph empty. Missing index -> ask user to `codegraph init` + gitignore `.codegraph/`; stale -> `codegraph sync -q`
 - Complex research: `task(general)`. Avoid: simple lookup
 - Background process: `bash` w/ nohup/Start-Process. Avoid: interactive
 - File one-off: `bash` for file ops. Avoid: bulk operations
 - Browser/site: `chrome-devtools` (CLI, Rust) — connects to running Chrome via CDP. Install: `cargo install chrome-devtools-cli`. Not on PATH -> ask. Prerequisite: `chrome://inspect/#remote-debugging`. Core: list-pages, navigate, snapshot, click/fill, type-text, evaluate, screenshot, read-page, console/network. Always `--target <name>` from list-pages.
-- Memory: `PluggedinMCP` — `memory_search` (recall task state on start), `memory_session.save` (snapshot before compaction/REFLECT/session end), `ask_knowledge_base` (domain lookup). Hygiene: check existing before creating new, update over duplicate
+- Memory: `PluggedinMCP` — `memory_session_start`/`end` wrap session, `memory_search` (recall on start), `memory_observe` (save: "workflow_step" snapshot / "failure_pattern" defect / "insight" handoff / "decision" convention), `ask_knowledge_base` (domain lookup). Hygiene: check existing before creating new, update over duplicate
 
 ## 8 DoD
 On completion, output:
 1. **What**: changes implemented
 2. **Why**: rationale
 3. **Evidence**: PID/port release + validation (lint, responsive)
-4. **State**: `./temp/state.md` updated (local), defects saved via `memory_session.save("defect", record)`
-5. **Handoff**: `memory_session.save("handoff", context)` (if session continues)
-6. **Memory**: `memory_session.save` final task state
-- Production mode → session end: promote repeatable patterns to `memory_session.save("convention", ...)` for future sessions
+4. **State**: task state via `memory_observe("workflow_step", ...)`, defects via `memory_observe("failure_pattern", defect)`
+5. **Handoff**: `memory_observe("insight", handoff context)` (if session continues)
+6. **Memory**: `memory_observe("workflow_step", final task state)`
+- Production mode → session end: promote repeatable patterns to `memory_observe("decision", convention)` for future sessions
 - Verify: test files, debug scripts, logs, temp output go ONLY in `./temp/` — never in project root or source dirs

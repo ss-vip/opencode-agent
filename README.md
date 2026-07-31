@@ -1,14 +1,14 @@
 # Coding Configuration
 
-## `[自用]` 對 OpenCode Build Agent 制定的設定檔。
+## `[自用]` 對 OpenCode Build/Plan 模式制定的設定檔。
 
 ### 檔案結構與說明
 
-* **`build-agent-plus.md` (核心 + 全部政策)**
-  * 涵蓋語言治理、執行模式、行為護欄、詞彙領域、工具安全、DevOps、CLI 權限自管、MCP 工具決策矩陣、完成定義 (DoD)。
+* **`agent-plus.md` (核心 + 全部政策)**
+  * 涵蓋語言治理、衝突解決優先級、執行模式（Vibe/Production/Plan Mode）、行為護欄、領域語言、工具安全、DevOps、CLI 權限自管、MCP 工具決策矩陣、完成定義 (DoD)。
   * 自主迭代工作流 INTENT → EXECUTE → VERIFY → REFLECT（意圖→執行→驗證→反思）的 Resilience Loop 彈性閉環。
-  * Agent 在執行任務時，會自動建立 `./temp/` 目錄與執行期狀態檔（Runtime States），確保所有暫存檔案、腳本與測試產物（Artifacts）與主專案嚴格隔離。
-  * 已建立 `.gitignore` 將 `./temp/` 排除於版本控制之外。
+  * Agent 在執行任務時，會建立 `./temp/` 目錄隔離所有暫存檔案、腳本與測試產物（Artifacts）；執行期狀態（phase/attempt/resume hook）改由 plugged.in 記憶系統（`memory_observe`）跨 PC 同步，不再寫本機狀態檔。
+  * 已建立 `.gitignore` 將 `./temp/` 與 `.codegraph/` 排除於版本控制之外。
 
 * **`MCP Tools` (常用 MCP)**
   * [codegraph](https://github.com/colbymchenry/codegraph)
@@ -19,8 +19,7 @@
   * [code-review](https://github.com/awesome-skills/code-review-skill)
   * [aha-skills-finder](https://github.com/its-How/aha-skills-finder)
   * [chrome-devtools-cli](https://github.com/aeroxy/chrome-devtools-cli)
-  * [systematic-debugging](https://github.com/osmontero/opencode-skills)
-
+  * [verification-before-completion](https://github.com/obra/superpowers/tree/main/skills/verification-before-completion)
 
 ---
 
@@ -35,7 +34,14 @@
     "api-gateway": {
       "models": {
         "openai": {
-          "name": "openai"
+          "name": "openai",
+          "limit": {
+            "context": 128000,
+            "output": 8000
+          },
+          "compaction": {
+            "threshold": 0.35
+          }
         }
       },
       "name": "api-gateway",
@@ -64,6 +70,10 @@
     }
   },
   "agent": {
+    "plan": {
+      "temperature": 0.2,
+      "top_p": 0.9
+    },
     "build": {
       "temperature": 0.2,
       "top_p": 0.9,
@@ -72,7 +82,6 @@
       }
     }
   },
-  "default_agent": "build",
   "compaction": {
     "auto": true,
     "prune": true,
@@ -105,7 +114,7 @@
     "@dietrichgebert/ponytail"
   ],
   "instructions": [
-    "https://raw.githubusercontent.com/ss-vip/opencode-agent/refs/heads/main/build-agent-plus.md"
+    "https://raw.githubusercontent.com/ss-vip/opencode-agent/refs/heads/main/agent-plus.md"
   ]
 }
 ```
