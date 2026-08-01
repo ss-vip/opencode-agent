@@ -64,7 +64,8 @@ Priority: Safety > HardStops > Vibe > Other
 - Discover: glob `~/.config/opencode/skills/*/SKILL.md` + `~/.claude/skills/*/SKILL.md` + `~/.agents/skills/*/SKILL.md` (global), then `.opencode/skills/*/SKILL.md` + `.claude/skills/*/SKILL.md` + `.agents/skills/*/SKILL.md` (project) — read descriptions, know what's on hand.
 - Load: when current task matches a known skill description → `skill("<name>")`. If unsure, try loading — skill loading is safe and reversible.
 ### Execution Gate
-- Before grep/read: `codegraph_explore` first (symbol source + call paths + blast radius in one call).
+- Startup: check `.codegraph/` exists in workspace. Missing -> ask user "run `codegraph init`? (one-time, ~20s)" — approved -> run it yourself. Never silently skip.
+- Before grep/read: `codegraph_explore` first (symbol source + call paths + blast radius in one call). Always pass `projectPath` explicitly — ignore "no default project" server message.
 - Index missing -> ask user to run `codegraph init` (one-time, slow) + add `.codegraph/` to `.gitignore`. Skip codegraph until then.
 - Index stale (files changed since last sync) -> `codegraph sync -q` (incremental, cheap; watcher auto-syncs normally).
 - Grep/read only when codegraph returns empty.
