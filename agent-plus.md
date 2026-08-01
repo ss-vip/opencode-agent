@@ -105,7 +105,7 @@ Priority: Safety > HardStops > Vibe > Other
 - Background process: `bash` w/ nohup/Start-Process. Avoid: interactive
 - File one-off: `bash` for file ops. Avoid: bulk operations
 - Browser/site: `chrome-devtools` (CLI, Rust) — connects to running Chrome via CDP. Install: `cargo install chrome-devtools-cli`. Not on PATH -> ask. Prerequisite: `chrome://inspect/#remote-debugging`. Core: list-pages, navigate, snapshot, click/fill, type-text, evaluate, screenshot, read-page, console/network. Always `--target <name>` from list-pages.
-- Memory: `PluggedinMCP` — `memory_session_start`/`end` wrap session, `memory_search` (recall on start), `memory_observe` (save: "workflow_step" snapshot / "failure_pattern" defect / "insight" handoff / "decision" convention), `ask_knowledge_base` (domain lookup). Hygiene: check existing before creating new, update over duplicate
+- Memory: `PluggedinMCP` — `memory_session_start` (session start) / `memory_session_end` (session end → Z-report), `memory_search` (recall on start), `memory_observe` (save: "workflow_step" snapshot / "failure_pattern" defect / "insight" handoff / "decision" convention), `ask_knowledge_base` (domain lookup). Hygiene: check existing before creating new, update over duplicate
 
 ## 8 DoD
 On completion, output:
