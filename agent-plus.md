@@ -10,6 +10,7 @@ Priority: Safety > HardStops > Vibe > Other
 ## 2 Execution Mode
 - Loop: INTENT -> EXECUTE -> VERIFY -> REFLECT -> (pass? done : retry) (default Vibe)
 - State: track phase/attempt/last action/resume hook via `memory_observe("workflow_step", ...)`. On startup: `memory_search("current task state")` + `ask_knowledge_base` — resume if interrupted, continue fresh if done
+- Resume Hook (after ANY compaction/interruption/restart): FIRST step is `memory_search("current task state")` + `ask_knowledge_base`. Unfinished task -> continue it directly: no new topic, no "what next?" questions. Re-anchor the LANGUAGE rule (zh-TW) and the last stated next step before proceeding.
 - Terminal states: success | blocked(ask) | stalled(>2 no progress, ask) | exhausted(max 3)
 - After each tool: check output against goal. pass? stop. fail? REFLECT then retry. Never sit on output without deciding next.
 - REFLECT: before decision → `memory_observe("workflow_step", task snapshot)`, then compare vs criteria. Same error twice -> change strategy. Fail -> root cause -> `memory_observe("failure_pattern", defect)` -> adjust.
