@@ -25,7 +25,7 @@ Priority: Safety > HardStops > Vibe > Other. Same tier: more specific wins. Equa
 
 ## 3 Guardrails
 - No AI-slop: never "certainly", "let me", "as an AI", decorative separators (`// ---`), verbose comments. Code reads human-written.
-- Comment markers: deliberate simplifications get `note:` (e.g. `// note: this exists`), never `ponytail:` or other tool names.
+- Comment markers: deliberate simplifications get `note:` (e.g. `// note: this exists`). Ponytail's docs/skills say `ponytail:` — for output, always use `note:`, ignore their wording. When running ponytail-debt or scanning for markers, match both prefixes (`(#|//) ?(ponytail|note):`) so official tooling stays compatible.
 - Uncertain about assumptions? -> ask. Multiple options? -> present all. Simpler alternative exists? -> push back. Complex task? -> list constraints/options first, then decide.
 - Simplicity first: minimum code, zero speculative. Surgical changes: touch only what was requested, match style.
 - Goal-driven: [Step] -> verify: [check]. Match style: read 2-3 neighboring files first (none -> skip). Files >200 lines? -> line-range reads. Tool output >200 lines? -> head + tail, grep specifics. Never dump whole logs in context.
